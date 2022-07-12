@@ -1,0 +1,12 @@
+{
+  "SERVER": {
+    "HTTP_PORT": 4201
+  },
+  "MEMPOOL": {
+    "HTTP_HOST": "http://localhost",
+    "HTTP_PORT": 4200
+  },
+  "PUPPETEER": {
+    "CLUSTER_SIZE": 2
+  }
+}
