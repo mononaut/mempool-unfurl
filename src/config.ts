@@ -2,6 +2,7 @@ const configFile = require('../config.json');
 
 interface IConfig {
   SERVER: {
+    HOST: 'http://localhost';
     HTTP_PORT: number;
   };
   MEMPOOL: {
@@ -15,6 +16,7 @@ interface IConfig {
 
 const defaults: IConfig = {
   'SERVER': {
+    'HOST': 'http://localhost',
     'HTTP_PORT': 4201,
   },
   'MEMPOOL': {

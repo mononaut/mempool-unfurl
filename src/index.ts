@@ -13,7 +13,7 @@ class Server {
 
   constructor() {
     this.app = express();
-    this.mempoolHost = config.MEMPOOL.HTTP_HOST + (config.MEMPOOL.HTTP_PORT ? ':' + config.MEMPOOL.HTTP_PORT : '') + '/';
+    this.mempoolHost = config.MEMPOOL.HTTP_HOST + (config.MEMPOOL.HTTP_PORT ? ':' + config.MEMPOOL.HTTP_PORT : '');
     this.startServer();
   }
 
@@ -44,7 +44,8 @@ class Server {
   }
 
   setUpRoutes() {
-    this.app.get('*', async (req, res) => { return this.renderPreview(req, res) })
+    this.app.get('/render*', async (req, res) => { return this.renderPreview(req, res) })
+    this.app.get('*', (req, res) => { return this.renderHTML(req, res) })
   }
 
 
@@ -75,7 +76,7 @@ class Server {
 
   async renderPreview(req, res) {
     try {
-      const img = await this.cluster?.execute(this.mempoolHost + req.originalUrl);
+      const img = await this.cluster?.execute(this.mempoolHost + req.params[0]);
 
       res.contentType('image/png');
       res.send(img);
@@ -83,6 +84,33 @@ class Server {
       console.log(e);
       res.status(500).send(e instanceof Error ? e.message : e);
     }
+  }
+
+  renderHTML(req, res) {
+    const ogImageUrl = config.SERVER.HOST + '/render/' + req.originalUrl;
+    res.send(`
+      <!doctype html>
+      <html lang="en-US" dir="ltr">
+      <head>
+        <meta charset="utf-8">
+        <title>mempool - Bitcoin Explorer</title>
+
+        <meta name="description" content="The Mempool Open Source Project™ - our self-hosted explorer for the Bitcoin community."/>
+        <meta property="og:image" content="${ogImageUrl}"/>
+        <meta property="og:image:type" content="image/png"/>
+        <meta property="og:image:width" content="1024"/>
+        <meta property="og:image:height" content="512"/>
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:site" content="@mempool">
+        <meta property="twitter:creator" content="@mempool">
+        <meta property="twitter:title" content="The Mempool Open Source Project™">
+        <meta property="twitter:description" content="Our self-hosted mempool explorer for the Bitcoin community."/>
+        <meta property="twitter:image:src" content="${ogImageUrl}"/>
+        <meta property="twitter:domain" content="mempool.space">
+
+      <body></body>
+      </html>
+    `);
   }
 }
 
