@@ -87,7 +87,7 @@ class Server {
   }
 
   renderHTML(req, res) {
-    const ogImageUrl = config.SERVER.HOST + '/render/' + req.originalUrl;
+    const ogImageUrl = config.SERVER.HOST + '/render' + req.originalUrl;
     res.send(`
       <!doctype html>
       <html lang="en-US" dir="ltr">
