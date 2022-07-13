@@ -87,7 +87,14 @@ class Server {
   }
 
   renderHTML(req, res) {
-    const ogImageUrl = config.SERVER.HOST + '/render' + req.originalUrl;
+    let lang = '';
+    let path = req.originalUrl
+    const parts = path.split(/^\/(ar|bg|bs|ca|cs|da|de|et|el|es|eo|eu|fa|fr|gl|ko|hr|id|it|he|ka|lv|lt|hu|mk|ms|nl|ja|nb|nn|pl|pt|pt-BR|ro|ru|sk|sl|sr|sh|fi|sv|th|tr|uk|vi|zh|hi)\//)
+    if (parts.length > 1) {
+      lang = "/" + parts[1];
+      path = "/" + parts[2];
+    }
+    const ogImageUrl = config.SERVER.HOST + '/render' + lang + "/preview" + path;
     res.send(`
       <!doctype html>
       <html lang="en-US" dir="ltr">
