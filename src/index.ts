@@ -5,6 +5,10 @@ import config from './config';
 import { Cluster } from 'puppeteer-cluster';
 const puppeteerConfig = require('../puppeteer.config.json');
 
+if (config.PUPPETEER.EXEC_PATH) {
+  puppeteerConfig.executablePath = config.PUPPETEER.EXEC_PATH;
+}
+
 class Server {
   private server: http.Server | undefined;
   private app: Application;
